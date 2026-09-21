@@ -1,0 +1,32 @@
+# Layer1---CosmaChain-Smart-Contracts
+
+CosmaChain-Smart-Contracts is the **contract engine layer** that sits on top of **Layer-1 CosmaCore** and **Layer-0 CosmaBed**.
+
+It provides:
+
+- S3E2C3-aligned contract logic (benefits, revenue, identity-bound transactions)
+- Domain contracts (CosmaStar, CosmaCare, FilmCore)
+- A Rust-based contract VM and dispatcher
+- Bindings to CosmaCore (L1) and app APIs (REST/GraphQL)
+
+## Relationship to Layer-0 and Layer-1
+
+- **Layer-0 (CosmaBed)**: Data Availability, Settlement, Integrity.
+- **Layer-1 (CosmaCore)**: Execution VM, Consensus, SCS State Machine, ESEC Ledger.
+- **This Layer (Smart-Contracts)**: High-level rules and agreements that are executed as SCSAction transactions on CosmaCore and anchored to CosmaBed.
+
+## Key Components
+
+- `engine/` – Contract VM, dispatcher, ABI.
+- `contracts/` – Benefits, revenue, identity-bound, domain contracts.
+- `storage/` – Contract state and state root computation.
+- `bindings/` – CosmaCore client + REST/GraphQL app API.
+- `utils/` – Crypto and encoding helpers.
+- `tests/` – S3E2C3 and domain contract tests.
+- `specifications/` – Formal specs and interface docs.
+- `architecture/` – Diagrams for flows and integration.
+
+## Running Tests
+
+```bash
+cargo test
