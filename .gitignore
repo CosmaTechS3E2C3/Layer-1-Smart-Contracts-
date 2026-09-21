@@ -1,1 +1,10 @@
+# Rust
+/target/
+/Cargo.lock
+**/*.rs.bk
+
+# Node
+node_modules/
+dist/
+.env
 
