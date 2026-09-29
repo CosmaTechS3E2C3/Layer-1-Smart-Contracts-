@@ -1,5 +1,3 @@
-//! REST API – expose contract engine to PWA / Expo / Supabase.
-
 use axum::{Router, routing::post, Json};
 use crate::engine::contract_vm::ContractVm;
 use crate::engine::abi::ContractCall;
