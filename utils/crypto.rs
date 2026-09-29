@@ -1,11 +1,14 @@
 use sha2::{Sha256, Digest};
 
-pub fn hash_bytes(data: &[u8]) -> [u8; 32] {
+pub fn hash(data: &[u8]) -> Vec<u8> {
     let mut hasher = Sha256::new();
     hasher.update(data);
-    let bytes = hasher.finalize();
-    let mut out = [0u8; 32];
-    out.copy_from_slice(&bytes[..32]);
-    out
+    hasher.finalize().to_vec()
 }
+
+pub fn hash_to_hex(data: &[u8]) -> String {
+    let bytes = hash(data);
+    hex::encode(bytes)
+}
+
 
