@@ -1,5 +1,3 @@
-//! Dispatcher – routes calls to specific contract modules.
-
 use crate::engine::abi::ContractCall;
 use crate::storage::contract_state::ContractState;
 use crate::contracts::{
