@@ -1,5 +1,3 @@
-//! Tests for domain contracts (CosmaStar, CosmaCare, FilmCore).
-
 #[cfg(test)]
 mod tests {
     use crate::engine::contract_vm::ContractVm;
