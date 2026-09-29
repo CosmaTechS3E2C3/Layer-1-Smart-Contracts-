@@ -1,21 +1,33 @@
-use crate::engine::abi::ContractCall;
-use serde_json::json;
+use crate::core::tx::tx_types::{Transaction, TxType};
+use crate::core::tx::tx_pool::TxPool;
+use crate::core::state::state_manager::StateManager;
+use crate::core::bindings::l0_bridge::L0Bridge;
 
-/// Stub: in production, this would call your L1 REST/GraphQL API.
-pub async fn submit_contract_call(call: ContractCall) -> Result<serde_json::Value, reqwest::Error> {
-    // Example: POST to CosmaCore tx endpoint
-    let body = json!({
-        "kind": "SCSAction",
-        "payload": call,
-    });
+pub struct CosmaCoreClient<'a> {
+    pub state: &'a mut StateManager,
+    pub tx_pool: &'a mut TxPool,
+}
 
-    // Placeholder URL – replace with real L1 endpoint
-    let _resp = reqwest::Client::new()
-        .post("https://cosmacore.example.com/tx")
-        .json(&body)
-        .send()
-        .await?;
+impl<'a> CosmaCoreClient<'a> {
+    pub fn submit_tx(&mut self, tx_type: TxType, sender: &str, payload: Vec<u8>) -> bool {
+        let tx = Transaction::new(tx_type, sender, payload);
+        self.tx_pool.submit_tx(tx)
+    }
 
-    Ok(json!({ "status": "submitted" }))
+    pub fn get_balance(&self, user: &str) -> u64 {
+        self.state.accounts.get_account(user)
+            .map(|acc| acc.balance)
+            .unwrap_or(0)
+    }
+
+    pub fn get_scs_phase(&self, user: &str) -> String {
+        // placeholder until SCS state registry is added
+        format!("Phase for {}", user)
+    }
+
+    pub fn anchor_state_root(&self) {
+        let root = self.state.compute_state_root();
+        let _ = L0Bridge::anchor(&root);
+    }
 }
 
