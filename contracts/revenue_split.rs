@@ -1,5 +1,3 @@
-//! Revenue Split – splits flows between parties.
-
 use serde_json::json;
 use crate::engine::abi::ContractCall;
 use crate::engine::contract_vm::ContractVm;
