@@ -1,25 +1,37 @@
-use crate::engine::abi::ContractCall;
-use crate::storage::contract_state::ContractState;
-use crate::contracts::{
-    benefits_agreement,
-    revenue_split,
-    identity_bound_tx,
-    cosmastar,
-    cosmcare,
-    filmcore,
-};
+use std::collections::HashMap;
 
-use serde_json::json;
+use crate::core::smart_contracts::engine::contract::Contract;
+use crate::core::smart_contracts::engine::contract_state::ContractState;
+use crate::core::smart_contracts::engine::contract_vm::ContractVM;
 
-pub fn dispatch(vm: &mut crate::engine::contract_vm::ContractVm, call: ContractCall) -> serde_json::Value {
-    match call.contract.as_str() {
-        "benefits_agreement" => benefits_agreement::handle(vm, call),
-        "revenue_split"      => revenue_split::handle(vm, call),
-        "identity_bound_tx"  => identity_bound_tx::handle(vm, call),
-        "cosmastar"          => cosmastar::handle(vm, call),
-        "cosmcare"           => cosmcare::handle(vm, call),
-        "filmcore"           => filmcore::handle(vm, call),
-        _ => json!({ "error": "unknown_contract" }),
-    }
+#[derive(Debug)]
+pub struct Dispatcher {
+    pub registry: HashMap<String, Contract>,
+    pub states: HashMap<String, ContractState>,
 }
 
+impl Dispatcher {
+    pub fn new() -> Self {
+        Self {
+            registry: HashMap::new(),
+            states: HashMap::new(),
+        }
+    }
+
+    pub fn register(&mut self, contract: Contract) {
+        self.states.insert(contract.address.clone(), ContractState::new());
+        self.registry.insert(contract.address.clone(), contract);
+    }
+
+    pub fn dispatch(&mut self, address: &str, payload: &[u8]) -> String {
+        let contract = match self.registry.get(address) {
+            Some(c) => c,
+            None => return "Contract not found".to_string(),
+        };
+
+        let state = self.states.get_mut(address).unwrap();
+        let vm = ContractVM::new();
+
+        vm.run(contract, state, payload)
+    }
+}
