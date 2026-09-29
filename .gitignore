@@ -1,10 +1,62 @@
-# Rust
+# ---------------------------
+# Rust Build Artifacts
+# ---------------------------
 /target/
 /Cargo.lock
-**/*.rs.bk
 
-# Node
-node_modules/
-dist/
+# ---------------------------
+# IDE / Editor Files
+# ---------------------------
+.vscode/
+.idea/
+*.iml
+
+# ---------------------------
+# OS Junk Files
+# ---------------------------
+.DS_Store
+Thumbs.db
+
+# ---------------------------
+# Logs
+# ---------------------------
+*.log
+
+# ---------------------------
+# Environment Files
+# ---------------------------
 .env
+.env.local
+.env.development
+.env.production
+
+# ---------------------------
+# Test Output
+# ---------------------------
+/test-output/
+/coverage/
+
+# ---------------------------
+# Temporary Files
+# ---------------------------
+*.tmp
+*.temp
+
+# ---------------------------
+# Smart‑Contract Engine Cache
+# ---------------------------
+/contract-cache/
+/contract-state-cache/
+
+# ---------------------------
+# ABI / Encoding Generated Files
+# ---------------------------
+/abi-gen/
+/encoding-cache/
+
+# ---------------------------
+# Ignore compiled artifacts
+# ---------------------------
+*.rlib
+*.rmeta
 
