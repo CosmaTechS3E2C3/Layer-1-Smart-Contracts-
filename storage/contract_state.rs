@@ -1,5 +1,3 @@
-//! Contract state – simple key/value store per contract.
-
 use std::collections::HashMap;
 use sha2::{Sha256, Digest};
 
