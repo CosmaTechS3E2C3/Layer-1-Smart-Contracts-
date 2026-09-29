@@ -1,20 +1,22 @@
-use serde_json::json;
-use crate::engine::abi::ContractCall;
-use crate::engine::contract_vm::ContractVm;
+use crate::core::smart_contracts::engine::contract_state::ContractState;
 
-pub fn handle(vm: &mut ContractVm, call: ContractCall) -> serde_json::Value {
-    match call.method.as_str() {
-        "define_split" => {
-            let id = call.args["split_id"].as_str().unwrap_or("unknown");
-            vm.state.set(&format!("split:{}", id), call.args.to_string());
-            json!({ "status": "ok", "split_id": id })
-        }
-        "get_split" => {
-            let id = call.args["split_id"].as_str().unwrap_or("unknown");
-            let data = vm.state.get(&format!("split:{}", id));
-            json!({ "split_id": id, "data": data })
-        }
-        _ => json!({ "error": "unknown_method" }),
+pub fn revenue_split(state: &mut ContractState, args: Vec<String>) -> String {
+    if args.len() < 3 {
+        return "Invalid args".to_string();
     }
-}
 
+    let stylist = &args[0];
+    let client = &args[1];
+    let amount = args[2].parse::<u64>().unwrap_or(0);
+
+    let stylist_amount = (amount as f64 * 0.88) as u64;
+    let platform_amount = amount - stylist_amount;
+
+    state.set(&format!("stylist_pay_{}", stylist), &stylist_amount.to_string());
+    state.set(&format!("platform_fee_{}", client), &platform_amount.to_string());
+
+    format!(
+        "Revenue split: stylist {} gets {}, platform gets {}",
+        stylist, stylist_amount, platform_amount
+    )
+}
