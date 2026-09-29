@@ -19,3 +19,4 @@ impl ContractVM {
         contract.execute(state, call.args)
     }
 }
+
