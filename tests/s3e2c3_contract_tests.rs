@@ -1,35 +1,42 @@
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::engine::contract_vm::ContractVm;
-    use crate::engine::abi::ContractCall;
-    use crate::storage::contract_state::ContractState;
-    use serde_json::json;
+use cosmachain_smart_contracts::engine::contract_state::ContractState;
+use cosmachain_smart_contracts::contracts::{
+    cosmcare, cosmastar, revenue_split, identity_bound_tx, cosmasocial,
+};
 
-    #[test]
-    fn create_and_get_benefits_agreement() {
-        let state = ContractState::new();
-        let mut vm = ContractVm::new(state);
-
-        let call = ContractCall {
-            contract: "benefits_agreement".into(),
-            method: "create_agreement".into(),
-            args: json!({ "agreement_id": "a1", "terms": "test" }),
-            sender: "alice".into(),
-        };
-
-        let res = vm.execute(call);
-        assert_eq!(res["status"], "ok");
-
-        let get_call = ContractCall {
-            contract: "benefits_agreement".into(),
-            method: "get_agreement".into(),
-            args: json!({ "agreement_id": "a1" }),
-            sender: "alice".into(),
-        };
-
-        let res2 = vm.execute(get_call);
-        assert_eq!(res2["agreement_id"], "a1");
-    }
+#[test]
+fn test_s3_identity_verification() {
+    let mut state = ContractState::new();
+    let result = identity_bound_tx(&mut state, vec!["userA".into(), "SecureAction".into()]);
+    assert!(result.contains("Identity-bound transaction"));
+    assert_eq!(state.get("idtx_userA").unwrap(), "SecureAction");
 }
 
+#[test]
+fn test_s3_service_validation() {
+    let mut state = ContractState::new();
+    let result = cosmcare(&mut state, vec!["userA".into(), "CareTier2".into()]);
+    assert!(result.contains("CosmaCare updated"));
+}
+
+#[test]
+fn test_e2_economic_split() {
+    let mut state = ContractState::new();
+    let result = revenue_split(&mut state, vec!["stylistA".into(), "clientA".into(), "200".into()]);
+    assert!(result.contains("Revenue split"));
+    assert_eq!(state.get("stylist_pay_stylistA").unwrap(), "176");
+    assert_eq!(state.get("platform_fee_clientA").unwrap(), "24");
+}
+
+#[test]
+fn test_c3_loyalty_reward_trigger() {
+    let mut state = ContractState::new();
+    let result = cosmastar(&mut state, vec!["userA".into(), "Boost100".into()]);
+    assert!(result.contains("CosmaStar visibility boosted"));
+}
+
+#[test]
+fn test_c3_engagement_reward() {
+    let mut state = ContractState::new();
+    let result = cosmasocial(&mut state, vec!["userA".into(), "HighEngagement".into()]);
+    assert!(result.contains("CosmaSocial engagement updated"));
+}
