@@ -1,5 +1,3 @@
-//! Crypto helpers.
-
 use sha2::{Sha256, Digest};
 
 pub fn hash_bytes(data: &[u8]) -> [u8; 32] {
