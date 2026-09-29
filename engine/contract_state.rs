@@ -1,23 +1,25 @@
-use crate::core::smart_contracts::engine::abi::AbiCall;
-use crate::core::smart_contracts::engine::contract_state::ContractState;
-use crate::core::smart_contracts::engine::contract::Contract;
+use std::collections::HashMap;
 
 #[derive(Debug)]
-pub struct ContractVM;
+pub struct ContractState {
+    pub storage: HashMap<String, String>,
+}
 
-impl ContractVM {
+impl ContractState {
     pub fn new() -> Self {
-        ContractVM
+        Self {
+            storage: HashMap::new(),
+        }
     }
 
-    pub fn run(&self, contract: &Contract, state: &mut ContractState, payload: &[u8]) -> String {
-        let call = match AbiCall::decode(payload) {
-            Some(c) => c,
-            None => return "ABI decode failed".to_string(),
-        };
+    pub fn get(&self, key: &str) -> Option<String> {
+        self.storage.get(key).cloned()
+    }
 
-        contract.execute(state, call.args)
+    pub fn set(&mut self, key: &str, value: &str) {
+        self.storage.insert(key.to_string(), value.to_string());
     }
 }
+
 
 
