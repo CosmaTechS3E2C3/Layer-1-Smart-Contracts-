@@ -1,5 +1,3 @@
-//! Identity-bound transactions – tie actions to identity.
-
 use serde_json::json;
 use crate::engine::abi::ContractCall;
 use crate::engine::contract_vm::ContractVm;
