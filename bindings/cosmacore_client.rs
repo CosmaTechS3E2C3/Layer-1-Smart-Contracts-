@@ -1,5 +1,3 @@
-//! Client to Layer-1 CosmaCore – submit contract calls as transactions.
-
 use crate::engine::abi::ContractCall;
 use serde_json::json;
 
