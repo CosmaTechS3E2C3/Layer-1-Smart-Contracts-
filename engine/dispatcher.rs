@@ -35,3 +35,4 @@ impl Dispatcher {
         vm.run(contract, state, payload)
     }
 }
+
