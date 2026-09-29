@@ -1,5 +1,3 @@
-//! Tests for S3E2C3-aligned contracts (benefits, identity-bound, revenue).
-
 #[cfg(test)]
 mod tests {
     use super::*;
