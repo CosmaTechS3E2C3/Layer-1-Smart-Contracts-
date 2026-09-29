@@ -1,5 +1,3 @@
-//! ABI – simple JSON-based contract call format.
-
 use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
