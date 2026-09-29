@@ -3,6 +3,7 @@ use crate::core::tx::tx_pool::TxPool;
 use crate::core::state::state_manager::StateManager;
 use crate::core::bindings::l0_bridge::L0Bridge;
 
+#[derive(Debug)]
 pub struct CosmaCoreClient<'a> {
     pub state: &'a mut StateManager,
     pub tx_pool: &'a mut TxPool,
@@ -21,8 +22,7 @@ impl<'a> CosmaCoreClient<'a> {
     }
 
     pub fn get_scs_phase(&self, user: &str) -> String {
-        // placeholder until SCS state registry is added
-        format!("Phase for {}", user)
+        format!("Phase for {}", user) // placeholder until SCS registry is added
     }
 
     pub fn anchor_state_root(&self) {
