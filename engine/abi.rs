@@ -17,7 +17,6 @@ impl AbiCall {
 }
 
 pub fn selector(function: &str) -> u32 {
-    // simple selector: hash first 4 bytes
     let hash = crate::core::utils::crypto::hash(function.as_bytes());
     u32::from_le_bytes([hash[0], hash[1], hash[2], hash[3]])
 }
