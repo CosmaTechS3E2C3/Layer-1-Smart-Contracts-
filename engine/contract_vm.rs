@@ -1,5 +1,3 @@
-//! Contract VM – executes contract calls against contract state.
-
 use crate::engine::abi::ContractCall;
 use crate::storage::contract_state::ContractState;
 
